@@ -1,0 +1,10 @@
+# These are files that should be packaged for the HGPLVM software
+dir: .
+~/mlprojects/hgplvm/matlab/data_35_04_walk.mat
+~/mlprojects/hgplvm/matlab/data_35_20_run.mat
+~/mlprojects/hgplvm/matlab/data_35_dependencies.mat
+dir: html
+~/mlprojects/hgplvm/html/index.html
+~/mlprojects/hgplvm/html/stickHierarchy.png
+~/mlprojects/hgplvm/html/demWalkRun_portrait.png
+~/mlprojects/hgplvm/html/demHighFive_talk.png
