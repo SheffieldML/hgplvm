@@ -31,7 +31,9 @@ visData = model.y(maxInd, :);
 visHandle = visualiseInfo(visIndex).visualiseFunction(visData, subSkel, visIndex, padding);
 
 set(axesHandle, 'UserData', 0);
-set(visHandle, 'eraseMode', 'xor');
+if verLessThan('matlab', 'R2014a')
+  set(visHandle, 'eraseMode', 'xor');
+end
 colormap gray;
 
 

@@ -28,7 +28,7 @@ function displayAxes = hgplvmHierarchicalVisualise(model, visualiseNodes, ...
 % seperate entity. The element visualiseInfo(i) corresponds to
 % visualiseNodes(i).
 
-global visualiseInfo dependencyVisData
+global visualiseInfo dependencyVisData displayAxes
 
 if nargin < 2
     dependencyInfo = [];
@@ -39,6 +39,7 @@ dependencyVisData = dependencyInfo;
 
 figLatent = figure(1);
 %define a main 'canvas' axes for plotting lines joining up subplots
+
 mainAxes = axes('Position', [0 0 1 1], 'Visible', 'Off', 'Xlim', [0 1], 'YLim', [0 1]);
 if nargin < 4
   tmargin = 0.03;
@@ -57,6 +58,7 @@ vPadding = 0.02;
 displayAxes = axes('position', ...
                    [1-rmargin+hPadding bmargin+vPadding ...
                     rmargin-2*hPadding 1-tmargin-bmargin-2*vPadding]);
+
 [plotW, plotH, plotCoords] = calculatePlotPosition;
 indAlreadyDrawn = [];
 indRoots = treeFindRoots(model.tree);
@@ -116,11 +118,21 @@ dummyVar = 0;
     end
     
     if ~any(indAlreadyDrawn == nodeIndex)
-      visualiseInfo(nodeIndex).latentHandle = line(0, 0, 'markersize', 20, ...
-                                                   'color', [0 0 0], ...
-                                                   'marker', '.', ...
-                                                   'visible', 'on', ...
-                                                   'erasemode', 'xor');
+      if verLessThan('matlab', 'R2014a')
+        visualiseInfo(nodeIndex).latentHandle = line(0, 0, 'markersize', 20, ...
+                                                     'color', [0 0 0], ...
+                                                     'marker', '.', ...
+                                                     'visible', 'on', ...
+                                                     'erasemode', ...
+                                                     'xor');
+      else
+        visualiseInfo(nodeIndex).latentHandle = line(0, 0, 'markersize', 20, ...
+                                                     'color', [0 0 0], ...
+                                                     'marker', '.', ...
+                                                     'visible', ...
+                                                     'on');
+      end
+        
       %visualiseInfo(nodeIndex).visualiseFunction = str2func([visualiseNodes(nodeIndex).subskel.type 'Visualise']);
       visualiseInfo(nodeIndex).visualiseFunction = str2func('skelVisualiseHierarchical');
       
@@ -200,12 +212,30 @@ dummyVar = 0;
       %only plot leaf node subskels as they are the only nodes that
       %contain skel information.
       if (~isempty(visualiseNodes(nodeIndex).subskel))
+        if ~verLessThan('matlab', 'R2014a')
+          axis(displayAxes, 'auto')
+        end
         visualiseInfo(nodeIndex).visHandle ...
             = plotSubSkel(nodeIndex,...
                           visualiseInfo(nodeIndex).model, ...
                           visualiseNodes(nodeIndex).subskel, ...
                           visualiseNodes(nodeIndex).padding, displayAxes);
+        if ~verLessThan('matlab', 'R2014a')
+          p = containers.Map;
+          p('xlim') = 0.1;
+          p('ylim') = 0.8;
+          p('zlim') = 0.1;
+          for l = {'xlim', 'ylim', 'zlim'}
+            lim = get(displayAxes, l{:});
+            span = lim(2) - lim(1);
+            lim(1) = lim(1) - p(l{:})*span;
+            lim(2) = lim(2) + p(l{:})*span;
+            set(displayAxes, l{:}, lim)
+          end
+          axis(displayAxes, 'manual')
+        end
       end
+
       drawnow
       indAlreadyDrawn = [indAlreadyDrawn nodeIndex];
       
