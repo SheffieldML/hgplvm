@@ -4,7 +4,7 @@
 
 # Hierarchical GP-LVM Software
 
-This page describes examples of how to use the hierarchical Gaussian process latent variable model Software (HGPLVM). 
+This page describes examples of how to use the hierarchical Gaussian process latent variable model Software (HGPLVM). The software is associated with the ICML paper ["Hierarchical Gaussian Process Latent Variable Models"](http://inverseprobability.com/publications/lawrence-hgplvm07.html) by Lawrence and Moore published at ICML 2007.
 
 The hierarchical GP-LVM allows you to create hierarchies of Gaussian process models. With the toolbox two hierarchy examples are given below.
 
